@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="./app.css">
+        <title>FedEx simple shipping app</title>
+    </head>
+    <body>
+        <main class="main">
+            <h1 class="title">FedEx simple shipping app</h1>
+                
+            <form class="section" name="origin" step="1">
+                <label class="label">
+                    <span class="label-text">Pickup:</span>
+                    <select class="select" name="origin">
+                        <option value=''>Choose pickup country</option>
+                        <option value='{ "country": "BR", "city": "São Paulo" }'>São Paulo, Brazil</option>
+                        <option value='{ "country": "FR", "city": "Limoges" }'>Limoges, France</option>
+                        <option value='{ "country": "IT", "city": "Firenze" }'>Firenze, Italy</option>
+                        <option value='{ "country": "NL", "city": "Hoofddorp" }'>Hoofddorp, Netherlands</option>
+                        <option value='{ "country": "ES", "city": "San Sebastián" }'>San Sebastian, Spain</option>
+                    </select>
+                </label>
+                <input class="button" type="submit" value="Next">
+                <span class="message success">OK</span>
+                <span class="message error">bad input</span>
+            </form>
+
+            <form class="section" name="destination" step="2">
+                <label class="label">
+                    <span class="label-text">Dropoff:</span>
+                    <select class="select" name="destination">
+                        <option value=''>Choose dropoff country</option>
+                        <option value='{ "country": "CN", "city": "Quanzhou" }'>Quanzhou, China</option>
+                        <option value='{ "country": "ID", "city": "Jakarta" }'>Jakarta, Indonesia</option>
+                        <option value='{ "country": "CY", "city": "Nicosia" }'>Nicosia, Cyprus</option>
+                        <option value='{ "country": "AU", "city": "Perth" }'>Perth, Australia</option>
+                        <option value='{ "country": "JP", "city": "Kyoto" }'>Kyoto, Japan</option>
+                    </select>
+                </label>
+                <input class="button" type="submit" value="Next">
+                <span class="message success">OK</span>
+                <span class="message error">bad input</span>
+            </form>
+
+            <form class="section" name="packages" step="3">
+                <label class="label">
+                    <span class="label-text">Package count:</span>
+                    <select class="select" name="packages">
+                        <option value=''>Choose number of packages</option>
+                        <option value='{ "packageCount": 1 }'>1</option>
+                        <option value='{ "packageCount": 2 }'>2</option>
+                        <option value='{ "packageCount": 3 }'>3</option>
+                        <option value='{ "packageCount": 4 }'>4</option>
+                    </select>
+                </label>
+                <input class="button" type="submit" value="Next">
+                <span class="message success">OK</span>
+                <span class="message error">bad input</span>
+            </form>
+            
+            <form class="section" name="finalize" step="4">
+                <p>
+                    The total price for your shipment will be <strong>$100.00</strong>.
+                </p>
+                <input class="button" type="submit" value="Finalize shipment">
+                <span class="message success">OK</span>
+                <span class="message error">bad input</span>
+            </form>
+
+            <div class="section" name="thankYou" step="5">
+                <p>Thank you. A driver is coming!</p>
+                <p>
+                    <button class="button ship-again">Ship again</button>
+                </p>
+            </div>
+        </main>
+
+        <script src="./analytics.js"></script>
+        <script src="./gdl.js"></script>
+        <script src="./app.js"></script>
+    </body>
+</html>
