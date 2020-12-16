@@ -943,6 +943,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "publishEvent", function() { return publishEvent; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ADD_LOG_TO_HISTORY", function() { return ADD_LOG_TO_HISTORY; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addLogToHistory", function() { return addLogToHistory; });
+/**
+ * publishEvent action
+ */
 var PUBLISH_EVENT = 'PUBLISH_EVENT';
 var publishEvent = function (data) {
     return {
@@ -950,7 +953,9 @@ var publishEvent = function (data) {
         data: data,
     };
 };
-// addLogToHistory action
+/**
+ * addLogToHistory action
+ */
 var ADD_LOG_TO_HISTORY = 'ADD_LOG_TO_HISTORY';
 var addLogToHistory = function (payload) {
     return {
@@ -974,6 +979,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createEventPublisher", function() { return createEventPublisher; });
 /* harmony import */ var _actions__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./actions */ "./src/actions/index.ts");
 
+/**
+ * Creates event publisher for using publishEvent action outside the library
+ */
 var createEventPublisher = function (dispatch) { return function (name, payload) {
     dispatch(Object(_actions__WEBPACK_IMPORTED_MODULE_0__["publishEvent"])({ name: name, payload: payload }));
 }; };
@@ -996,23 +1004,34 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _reducers__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./reducers */ "./src/reducers/index.ts");
 /* harmony import */ var _event_publisher__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./event-publisher */ "./src/event-publisher.ts");
 /* harmony import */ var _middlewares__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./middlewares */ "./src/middlewares/index.ts");
+/**
+ * Root module
+ */
 
 
 
 
 
 var composeEnhancers = Object(redux_devtools_extension__WEBPACK_IMPORTED_MODULE_1__["composeWithDevTools"])({});
+/**
+ * Creates gdl instance
+ */
 var createGdl = function () {
+    // Registers reducers
     var reducers = Object(redux__WEBPACK_IMPORTED_MODULE_0__["combineReducers"])({
         dataLayer: _reducers__WEBPACK_IMPORTED_MODULE_2__["dataLayerReducer"],
         logs: _reducers__WEBPACK_IMPORTED_MODULE_2__["logsReducer"],
     });
+    // Creates store
     var store = Object(redux__WEBPACK_IMPORTED_MODULE_0__["createStore"])(reducers, {}, composeEnhancers(redux__WEBPACK_IMPORTED_MODULE_0__["applyMiddleware"].apply(void 0, _middlewares__WEBPACK_IMPORTED_MODULE_4__["middlewares"])));
+    // Public methods and properties
     return {
         publishEvent: Object(_event_publisher__WEBPACK_IMPORTED_MODULE_3__["createEventPublisher"])(store.dispatch),
+        // DataLayer state
         get dataLayer() {
             return store.getState().dataLayer;
         },
+        // Logs state
         get logs() {
             return store.getState().logs;
         },
@@ -1085,18 +1104,20 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var analytics = window.analytics || {};
-/* TODO add root state **/
 var trackerMiddleware = function (store) { return function (next) { return function (action) {
     var _a, _b, _c;
     var returnValue = next(action);
     if (action.type === _actions__WEBPACK_IMPORTED_MODULE_0__["PUBLISH_EVENT"] && action.data) {
         var eventName = action.data.name;
         var dataLayerState = store.getState().dataLayer;
+        // Calls trackPage
         if (eventName === 'pageInfo') {
             analytics.trackPage((_a = dataLayerState.page) === null || _a === void 0 ? void 0 : _a.pageName, Object(_utils__WEBPACK_IMPORTED_MODULE_1__["generateDimensionsObj"])('trackPage', dataLayerState));
+            // Calls trackConversion
         }
         else if (eventName === 'shipmentComplete') {
             analytics.trackConversion((_c = (_b = dataLayerState.app) === null || _b === void 0 ? void 0 : _b.rate) === null || _c === void 0 ? void 0 : _c.amount, Object(_utils__WEBPACK_IMPORTED_MODULE_1__["generateDimensionsObj"])('trackConversion', dataLayerState));
+            // Calls trackEvent
         }
         else {
             analytics.trackEvent(eventName, Object(_utils__WEBPACK_IMPORTED_MODULE_1__["generateDimensionsObj"])('trackEvent', dataLayerState));
@@ -1150,6 +1171,7 @@ var dataLayerReducer = function (state, action) {
     switch (action.type) {
         case _actions_index__WEBPACK_IMPORTED_MODULE_0__["PUBLISH_EVENT"]:
             var _b = action.data || {}, name_1 = _b.name, payload = _b.payload;
+            // Changes page state
             if (name_1 === 'pageInfo') {
                 var pageId = payload.pageId;
                 var _c = pageId.split('|'), countryCode = _c[0], languageCode = _c[1], pageNameArr = _c.slice(2);
@@ -1160,9 +1182,11 @@ var dataLayerReducer = function (state, action) {
                         pageName: pageNameArr.join('|'),
                     } });
             }
+            // Changes errors state
             if (name_1 === 'error') {
                 return __assign(__assign({}, state), { app: __assign(__assign({}, state.app), { errors: __spreadArrays((((_a = state.app) === null || _a === void 0 ? void 0 : _a.errors) || []), [payload]) }) });
             }
+            // Changes app state
             var appData = Object(_utils__WEBPACK_IMPORTED_MODULE_1__["modifyPublishedEventDataForStore"])(action.data);
             if (appData) {
                 return __assign(__assign({}, state), { app: __assign(__assign({}, state.app), appData) });
@@ -1218,6 +1242,9 @@ var __assign = (undefined && undefined.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
+/**
+ * Logs reducer
+ */
 
 var initialState = {
     history: null,
@@ -1248,6 +1275,9 @@ var logsReducer = function (state, action) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "modifyPublishedEventDataForStore", function() { return modifyPublishedEventDataForStore; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "generateDimensionsObj", function() { return generateDimensionsObj; });
+/**
+ * Modifies published event data to the storage form data
+ */
 var modifyPublishedEventDataForStore = function (_a) {
     var name = _a.name, payload = _a.payload;
     if (name === 'viewStep' || name === 'packagesComplete')
@@ -1259,9 +1289,13 @@ var modifyPublishedEventDataForStore = function (_a) {
     if (name === 'viewRate')
         return { rate: payload };
 };
+/**
+ * Generates dimensions object from the storage data
+ */
 var generateDimensionsObj = function (tracker, dataLayerState) {
     var page = dataLayerState.page, app = dataLayerState.app;
     var pageId = page.pageId, countryCode = page.countryCode, languageCode = page.languageCode;
+    // Dimensions for trackPage event
     if (tracker === 'trackPage') {
         return {
             dimension01: pageId,
@@ -1269,6 +1303,7 @@ var generateDimensionsObj = function (tracker, dataLayerState) {
             dimension03: languageCode,
         };
     }
+    // Dimensions for all events
     var _a = app || {}, stepName = _a.stepName, stepNumber = _a.stepNumber, origin = _a.origin, destination = _a.destination, packageCount = _a.packageCount, rate = _a.rate, errors = _a.errors;
     return {
         dimension01: pageId,
@@ -1283,6 +1318,9 @@ var generateDimensionsObj = function (tracker, dataLayerState) {
         dimension10: (errors === null || errors === void 0 ? void 0 : errors.map(stringifyObject).join(',')) || '',
     };
 };
+/**
+ * Stringifies object to the dimension value type
+ */
 var stringifyObject = function (obj) {
     if (obj === void 0) { obj = {}; }
     return Object.values(obj).reduce(function (acc, val, i, arr) {
