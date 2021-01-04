@@ -1,9 +1,8 @@
 /**
  * Data layer reducer
  */
-import { ActionTypes } from '../actions';
+import { ActionTypes, PUBLISH_EVENT } from '../actions';
 import { DataLayerState } from '../interfaces/data-layer-state';
-import { PUBLISH_EVENT } from '../actions/index';
 import { modifyPublishedEventDataForStore } from '../utils';
 
 const initialState: DataLayerState = {
